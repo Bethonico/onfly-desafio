@@ -35,7 +35,7 @@ A investigação inicial comparou o comportamento descrito no README com os test
 | Área | Causa identificada | Estado |
 | --- | --- | --- |
 | Status | O filtro exclui apenas `CANCELLED`, então inclui reservas `NO_SHOW` nos cálculos. | Corrigido. Apenas `CONFIRMED` passa pelo filtro. O teste de status passou. |
-| Noites | O cálculo subtrai apenas o dia do mês, produzindo resultados incorretos nas viradas de mês ou ano. | Pendente |
+| Noites | O cálculo subtrai apenas o dia do mês, produzindo resultados incorretos nas viradas de mês ou ano. | Corrigido. A diferença usa as datas completas e é multiplicada pela quantidade de quartos. O teste de noites passou. |
 | Câmbio | A conversão divide pela taxa e passa por `float`, embora a taxa represente o fator de multiplicação para BRL. | Pendente |
 | Ranking | A ordenação por valor é crescente, então os hotéis de menor gasto aparecem primeiro. | Pendente |
 
@@ -57,3 +57,5 @@ Compare `output/exemplo.json` com a amostra do README. O resumo esperado tem 12 
 **Resultado inicial do pytest** — 5 falhas no Python 3.11.18. A validação final está pendente.
 
 **Após corrigir o status** — 1 teste passou e 4 falharam no Python 3.11.18. A suíte ainda aponta falhas de câmbio, noites, ranking e regressão.
+
+**Após corrigir as noites** — 2 testes passaram e 3 falharam no Python 3.11.18. As falhas restantes são de câmbio, ranking e regressão. A checagem de 30/12 a 02/01 com dois quartos retornou 6 noites de quarto.
