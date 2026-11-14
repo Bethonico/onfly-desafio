@@ -37,7 +37,7 @@ A investigação inicial comparou o comportamento descrito no README com os test
 | Status | O filtro exclui apenas `CANCELLED`, então inclui reservas `NO_SHOW` nos cálculos. | Corrigido. Apenas `CONFIRMED` passa pelo filtro. O teste de status passou. |
 | Noites | O cálculo subtrai apenas o dia do mês, produzindo resultados incorretos nas viradas de mês ou ano. | Corrigido. A diferença usa as datas completas e é multiplicada pela quantidade de quartos. O teste de noites passou. |
 | Câmbio | A conversão divide pela taxa e passa por `float`, embora a taxa represente o fator de multiplicação para BRL. | Corrigido. O valor é multiplicado pela taxa usando `Decimal`, com arredondamento apenas na saída. |
-| Ranking | A ordenação por valor é crescente, então os hotéis de menor gasto aparecem primeiro. | Pendente |
+| Ranking | A ordenação por valor é crescente, então os hotéis de menor gasto aparecem primeiro. | Corrigido. O ranking usa primeiro o maior valor em reais e depois o menor `hotel_id` em caso de empate. |
 
 ## Como validar
 
@@ -54,10 +54,14 @@ python -m onfly_report --input data/reservas_hoteis.csv --rates data/taxas_cambi
 
 Compare `output/exemplo.json` com a amostra do README. O resumo esperado tem 12 reservas, 9 confirmadas, 2 canceladas, 1 não comparecimento, 28 noites de quarto, total de `"7566.00"` e média de `"270.21"`. Confira também os meses e a ordem dos hotéis.
 
-**Resultado inicial do pytest** — 5 falhas no Python 3.11.18. A validação final está pendente.
+**Resultado inicial do pytest** — 5 falhas no Python 3.11.18.
 
 **Após corrigir o status** — 1 teste passou e 4 falharam no Python 3.11.18. A suíte ainda aponta falhas de câmbio, noites, ranking e regressão.
 
 **Após corrigir as noites** — 2 testes passaram e 3 falharam no Python 3.11.18. As falhas restantes são de câmbio, ranking e regressão. A checagem de 30/12 a 02/01 com dois quartos retornou 6 noites de quarto.
 
 **Após corrigir o câmbio** — 4 testes passaram e 1 falhou no Python 3.11.18. Os testes de câmbio e regressão passaram. Resta a falha de ranking. Na checagem de precisão, duas conversões de `0.0542` foram somadas e só então formatadas como `"0.11"`.
+
+**Após corrigir o ranking** — os 5 testes fornecidos passaram no Python 3.11.18. A checagem adicional confirmou que, com dois hotéis de mesmo valor e `--top 1`, o menor `hotel_id` aparece no relatório.
+
+A execução na amostra confirmou o resumo, os totais mensais e os cinco hotéis esperados no README. Na base principal, o CLI gerou o JSON com 200 reservas, 153 confirmadas, 909 noites de quarto e total de `"249543.79"` em reais.
