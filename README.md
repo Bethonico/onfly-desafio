@@ -203,7 +203,7 @@ python scripts/gerar_painel.py
 
 Em um ambiente criado com `uv`, a instalação também pode ser feita com `uv pip install -r requirements-painel.txt`.
 
-Abra `output/painel.html` no navegador. O arquivo inclui o Plotly e funciona offline. O painel mostra os indicadores, o gasto mensal, os hotéis do ranking e a contagem por status a partir do JSON já calculado.
+Abra `output/painel.html` no navegador. O arquivo inclui o Plotly e funciona offline. O painel mostra os indicadores, o gasto mensal, os hotéis do ranking e a contagem por status a partir do JSON já calculado. Use o seletor **Mês de check-in** para atualizar o gasto, as reservas confirmadas, as noites de quarto e o gráfico mensal. Em **Todos os meses**, o painel volta a exibir os totais e a média por noite do relatório. Ranking e status mostram o período completo.
 
 Para gerar um painel da amostra após produzir `output/exemplo.json`, execute o comando abaixo.
 

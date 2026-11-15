@@ -43,7 +43,15 @@ def format_month(value: str, *, short_year: bool = False) -> str:
     return f"{MONTHS[date.month - 1]}/{year}"
 
 
-def render_chart(figure: go.Figure, chart_id: str, height: int, *, left: int, bottom: int) -> str:
+def render_chart(
+    figure: go.Figure,
+    chart_id: str,
+    height: int,
+    *,
+    left: int,
+    bottom: int,
+    post_script: str | None = None,
+) -> str:
     figure.update_layout(
         autosize=True,
         height=height,
@@ -62,6 +70,7 @@ def render_chart(figure: go.Figure, chart_id: str, height: int, *, left: int, bo
         config={"responsive": True, "displayModeBar": False},
         div_id=chart_id,
         default_width="100%",
+        post_script=post_script,
     )
 
 
@@ -100,7 +109,14 @@ def monthly_chart(months: list[dict]) -> str:
         range=[-0.27, len(month_ids) - 0.73],
     )
     figure.update_yaxes(**CURRENCY_AXIS)
-    return render_chart(figure, "gasto-mensal", 285, left=72, bottom=48)
+    return render_chart(
+        figure,
+        "gasto-mensal",
+        285,
+        left=72,
+        bottom=48,
+        post_script='connectMonthFilter(document.getElementById("{plot_id}"));',
+    )
 
 
 def ranking_chart(hotels: list[dict]) -> str:
@@ -164,9 +180,15 @@ def build_panel(report: dict) -> str:
         period = "Sem check-ins confirmados"
 
     generated_at = datetime.fromisoformat(report["generated_at"]).strftime("%d/%m/%Y às %H:%M")
+    month_options = "\n".join(
+        f'<option value="{escape(row["month"])}">{format_month(row["month"])}</option>'
+        for row in months
+    )
     template = Template(Path(__file__).with_name("painel.html").read_text(encoding="utf-8"))
     return template.substitute(
         period=escape(period),
+        month_filter_hidden="" if months else "hidden",
+        month_options=month_options,
         generated_at=generated_at,
         total_reservations=format_count(summary["total_reservations"]),
         confirmed_reservations=format_count(summary["confirmed_reservations"]),

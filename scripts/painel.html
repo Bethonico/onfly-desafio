@@ -17,6 +17,11 @@
     body { margin: 0; }
     main { width: min(1120px, 100% - 48px); margin: 38px auto 24px; }
     .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      flex-wrap: wrap;
+      gap: 18px;
       background: radial-gradient(ellipse at 100% 0%, #135e61 0%, transparent 65%), #112f3f;
       border-radius: 22px;
       padding: clamp(26px, 5.7vw, 60px);
@@ -29,12 +34,26 @@
       line-height: 1.03;
     }
     .period { margin-top: 14px; color: #dcf4f0; font-size: 1rem; }
+    .month-filter label { display: block; margin-bottom: 6px; font-size: .88rem; }
+    .month-filter select {
+      width: 180px;
+      max-width: 100%;
+      min-height: 42px;
+      padding: 8px 10px;
+      border: 1px solid #cadde3;
+      border-radius: 8px;
+      background: #f6fbfc;
+      color: #19374b;
+      font: inherit;
+    }
+    .month-filter select:focus-visible { outline: 2px solid white; outline-offset: 4px; }
     .metrics {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 14px;
       margin: 18px 0;
     }
+    .metrics.is-filtered { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     .metric, .panel {
       background: white;
       border: 1px solid var(--border);
@@ -82,6 +101,8 @@
     @media (max-width: 480px) {
       main { width: calc(100% - 24px); margin-top: 12px; }
       .metrics { gap: 10px; margin: 12px 0; }
+      .metrics.is-filtered { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .metrics.is-filtered .spend { grid-column: 1 / -1; }
       .metric { padding: 14px 12px; }
       .metric.spend { padding-top: 12px; }
       .metric dd { font-size: clamp(1.05rem, 5.3vw, 1.5rem); }
@@ -90,26 +111,75 @@
     }
   </style>
   <script>$plotly_js</script>
+  <script>
+    function connectMonthFilter(chart) {
+      const filter = document.getElementById("checkin-month");
+      const metricList = document.getElementById("report-metrics");
+      const reservationsLabel = document.getElementById("reservations-label");
+      const confirmedNote = document.getElementById("confirmed-note");
+      const averageCard = document.getElementById("average-card");
+      const values = ["spend-value", "reservations-value", "nights-value"]
+        .map((id) => document.getElementById(id));
+      const overall = values.map((element) => element.textContent);
+      const {x: months, y: spending, customdata: details} = chart.data[0];
+      const {ticktext: labels, range} = chart.layout.xaxis;
+
+      filter.addEventListener("change", () => {
+        const index = months.indexOf(filter.value);
+        const filtered = index !== -1;
+        const metrics = filtered ? details[index].slice(1) : overall;
+
+        reservationsLabel.textContent = filtered ? "Reservas confirmadas" : "Reservas";
+        values.forEach((element, position) => { element.textContent = metrics[position]; });
+        confirmedNote.hidden = filtered;
+        averageCard.hidden = filtered;
+        metricList.classList.toggle("is-filtered", filtered);
+
+        Plotly.update(chart, {
+          x: [filtered ? [months[index]] : months],
+          y: [filtered ? [spending[index]] : spending],
+          customdata: [filtered ? [details[index]] : details],
+          mode: filtered ? "markers" : "lines+markers",
+          fill: filtered ? "none" : "tozeroy"
+        }, {
+          "xaxis.type": "category",
+          "xaxis.tickvals": filtered ? [months[index]] : months,
+          "xaxis.ticktext": filtered ? [labels[index]] : labels,
+          "xaxis.range": filtered ? [-0.5, 0.5] : range
+        }, [0]);
+      });
+      filter.disabled = false;
+    }
+  </script>
 </head>
 <body>
   <main>
     <header class="hero">
-      <h1>Reservas de hotel</h1>
-      <p class="period">$period</p>
+      <div>
+        <h1>Reservas de hotel</h1>
+        <p class="period">$period</p>
+      </div>
+      <div class="month-filter" $month_filter_hidden>
+        <label for="checkin-month">Mês de check-in</label>
+        <select id="checkin-month" disabled>
+          <option value="">Todos os meses</option>
+          $month_options
+        </select>
+      </div>
     </header>
 
-    <dl class="metrics" aria-label="Indicadores do relatório">
+    <dl id="report-metrics" class="metrics" aria-label="Indicadores do relatório" aria-live="polite">
       <div class="metric">
-        <dt>Reservas</dt><dd>$total_reservations</dd>
-        <dd class="note">$confirmed_reservations confirmadas</dd>
+        <dt id="reservations-label">Reservas</dt><dd id="reservations-value">$total_reservations</dd>
+        <dd id="confirmed-note" class="note">$confirmed_reservations confirmadas</dd>
       </div>
       <div class="metric">
-        <dt>Noites de quarto</dt><dd>$total_room_nights</dd>
+        <dt>Noites de quarto</dt><dd id="nights-value">$total_room_nights</dd>
       </div>
       <div class="metric spend">
-        <dt>Gasto total</dt><dd>$total_amount_brl</dd>
+        <dt>Gasto total</dt><dd id="spend-value">$total_amount_brl</dd>
       </div>
-      <div class="metric">
+      <div id="average-card" class="metric">
         <dt>Média por noite de quarto</dt><dd>$average_nightly_rate_brl</dd>
       </div>
     </dl>
@@ -126,12 +196,14 @@
       <section class="panel" aria-labelledby="ranking-title">
         <header>
           <h2 id="ranking-title">Hotéis com maior gasto</h2>
+          <p>Período completo do relatório</p>
         </header>
         <div class="chart">$ranking_chart</div>
       </section>
       <section class="panel" aria-labelledby="status-title">
         <header>
           <h2 id="status-title">Reservas por status</h2>
+          <p>Período completo do relatório</p>
         </header>
         <div class="chart">$status_chart</div>
       </section>
