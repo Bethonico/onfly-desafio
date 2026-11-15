@@ -86,3 +86,7 @@ O script em scripts/gerar_painel.py usa o JSON consolidado para exibir indicador
 O HTML foi aberto no Chrome em modo offline com a base principal, a amostra e um relatório sem reservas confirmadas. Indicadores e valores dos gráficos foram conferidos contra o JSON. A base principal foi verificada em larguras de 320, 390 e 1.280 pixels. A suíte do CLI passou com 11 testes no Python 3.11.18, e o Ruff passou incluindo o novo script.
 
 **Filtro por mês de check-in** — o seletor atualiza o gasto, as reservas confirmadas, as noites de quarto e o gráfico mensal com os dados de by_month. O ranking, os status e a média por noite do JSON são referentes ao período completo. No Chrome offline, a base principal e a amostra confirmaram a seleção de mês e o retorno à visão geral. O relatório sem reservas confirmadas indica a ausência de dados mensais.
+
+## Análise dos dados (complemento)
+
+Após a entrega inicial, acrescentei uma análise da base principal com a evolução mensal, os status das reservas e a concentração do valor entre hotéis. Veja [Análise das reservas de hotel](ANALISE-DADOS.md).

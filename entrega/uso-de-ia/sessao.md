@@ -1023,3 +1023,119 @@ A branch `docs/registro-uso-de-ia` está ativa. O commit da correção falhou po
 ## Resultado da etapa final
 
 O Codex validou a rejeição de `NaN`, `Infinity` e `-Infinity` no valor da reserva. A suíte passou com 14 testes no Python 3.11.18, e o Ruff passou. Os relatórios da amostra e da base principal coincidiram com os resultados anteriores. O registro consolidado e a declaração foram preparados para o repositório.
+
+## Encerramento da interação 23
+
+**Codex · resposta**
+
+~~~~text
+Corrigi a validação de `amount`. O CLI agora rejeita `NaN`, `Infinity` e `-Infinity`, informa a linha inválida e retorna **código `2`**. Os **14 testes passaram no Python 3.11.18**, o Ruff passou e os relatórios da amostra e da base principal bateram com os resultados anteriores.
+
+Também criei `entrega/uso-de-ia/sessao.md` e `entrega/uso-de-ia/declaracao.md`. O registro reúne 23 interações, com caminhos pessoais e o link de acesso ao material ocultados. A declaração identifica o **OpenAI Codex**, o modelo `gpt-6.1-sol` e a participação de cada um.
+
+O commit anterior falhou porque faltou `services/` no caminho de `row_parser.py`. Rode os comandos abaixo na raiz do projeto para registrar a correção na branch de código e a documentação em um commit separado:
+
+```powershell
+git switch fix/valor-reserva-nao-finito
+git add -- src/onfly_report/services/row_parser.py tests/test_invalid_reservation_amount.py entrega/README-ENTREGA.md
+git commit -m "fix: rejeita valor de reserva não finito"
+
+git switch docs/registro-uso-de-ia
+git merge --ff-only fix/valor-reserva-nao-finito
+git add -- entrega/uso-de-ia/sessao.md entrega/uso-de-ia/declaracao.md
+git commit -m "docs: registra uso de IA no desafio"
+```
+~~~~
+
+## Interação 24 · 15/11/2026
+
+**Usuário**
+
+~~~~text
+analise o codigo para ver se esta dentro das regras do desafio
+~~~~
+
+**Codex · atualização**
+
+~~~~text
+Vou comparar o código e os arquivos de entrega com o README original, rodar os testes no Python 3.11 e conferir o estado das branches. A revisão será só de leitura no projeto.
+~~~~
+
+**Codex · resposta**
+
+~~~~text
+**Sim. O código no commit `6db1810` está de acordo com as regras do desafio nos cenários verificados.** A versão completa está na branch `docs/registro-uso-de-ia`.
+
+- **CLI e relatório** — executei uma cópia limpa do commit no Python 3.11.18, sem dependências externas. Os JSONs da amostra e da base principal bateram com um cálculo independente. A base principal tem **300 reservas, 235 confirmadas, 1.347 noites de quarto e R$ 396.170,00**. Também conferi o arredondamento após a soma, o desempate do ranking e os códigos de saída `0`, `1` e `2`.
+- **Testes e arquivos protegidos** — os **14 testes passaram**, incluindo os 5 fornecidos, e o Ruff passou. Comparei os CSVs e os testes originais com o ZIP do desafio e confirmei que o conteúdo foi preservado.
+- **Painel e documentação** — o filtro mensal funcionou no Chrome offline. O Plotly é opcional para o painel. O commit inclui o `README-ENTREGA.md`, o registro da sessão e a declaração de uso de IA.
+
+**Falta a etapa de entrega.** A `main` local ainda está no commit inicial. Integre a branch final à `main`, publique o projeto, confirme que o repositório está público e envie o link pelo formulário da Onfly.
+~~~~
+
+## Interação 25 · 15/11/2026
+
+**Usuário**
+
+~~~~text
+entreguei
+
+tinha como fazer uma analise daqueles dados
+~~~~
+
+**Codex · atualização**
+
+~~~~text
+Vou usar a habilidade de planilhas para cruzar os CSVs de reservas e câmbio. Quero ver o que os dados mostram sobre gastos, meses, hotéis e reservas que não se concretizaram.
+~~~~
+
+**Codex · resposta**
+
+~~~~text
+Sim. Cruzei a base principal com as taxas de câmbio do desafio. Entre **dezembro de 2024 e junho de 2025**, foram registradas **300 reservas**. As **235 confirmadas** somaram **1.347 noites de quarto** e **R$ 396.170,00**, com média de **R$ 294,11 por noite de quarto**. [fonte: data/reservas_hoteis.csv] [fonte: data/taxas_cambio.csv]
+
+### O que os dados mostram
+
+- **Março teve o maior gasto. Junho teve o maior volume.** Março somou **R$ 65.984,99** em 215 noites de quarto. Junho chegou a **243 noites** com gasto menor, de **R$ 63.351,29**. O custo médio por noite caiu de **R$ 306,91** em março para **R$ 260,70** em junho.
+- **Abril teve a maior queda mensal de gasto.** O total caiu **52,5%** em relação a março. O volume de noites caiu **32,1%**, e o custo médio por noite caiu **30,1%**. Os dois fatores contribuíram para a queda.
+- **Dezembro concentrou mais cancelamentos e não comparecimentos.** No período todo, houve **31 cancelamentos e 34 não comparecimentos**, juntos **21,7% das reservas**. Em dezembro, foram **18 de 53**, ou **34,0%**, a maior proporção da base.
+- **Os cinco hotéis com maior gasto concentraram 52,8% do total.** O **Hotel Salvador Centro** liderou em valor, com **R$ 45.165,46** em 160 noites de quarto. O **Hotel Miami Beach** teve o maior custo médio por noite entre os 12 hotéis, **R$ 392,90**.
+~~~~
+
+## Interação 26 · 15/11/2026
+
+**Usuário**
+
+~~~~text
+vamos colocar isso na nossa entrega, ou vc acha que podemos fazer um aquivo proprio pra isso, tome como base as regras do desafio, e outra ja entreguei, a entrega era o meu link no github acho que da para melhorar&#x20;
+
+e lembre do que vc precisa, atualizar o uso de ia e a sessao
+~~~~
+
+**Codex · atualização**
+
+~~~~text
+Proponho criar `entrega/ANALISE-DADOS.md` e colocar um link no `README-ENTREGA.md`. Assim, quem abrir o GitHub encontra a análise como complemento do desafio. Vou conferir a branch e os arquivos de uso de IA antes de editar.
+~~~~
+
+**Codex · resposta**
+
+~~~~text
+A `main` local e a referência local `origin/main` estão no commit que você entregou. Pode criar `docs/analise-dados` com `git switch -c docs/analise-dados` e me avisar? Vou preparar a análise e a atualização do registro de IA enquanto isso.
+~~~~
+
+**Usuário**
+
+~~~~text
+sim, criei new branch 'docs/analise-dados'
+~~~~
+
+**Codex · atualização**
+
+~~~~text
+A branch `docs/analise-dados` está ativa. Vou criar `ANALISE-DADOS.md`, adicionar o link no `README-ENTREGA.md` e atualizar `declaracao.md` e `sessao.md` com as interações desta etapa. Recalculei os valores diretamente dos CSVs para conferir a tabela mensal e as comparações.
+~~~~
+
+## Complemento após a entrega
+
+O Codex comparou o valor das reservas confirmadas, as noites de quarto e os status ao longo do tempo. Os resultados e o método foram registrados em `entrega/ANALISE-DADOS.md`, com um link no `README-ENTREGA.md`. A declaração foi atualizada para incluir a análise.

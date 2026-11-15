@@ -8,9 +8,12 @@ Usei o **OpenAI Codex**, com o modelo `gpt-6.1-sol`, durante a resolução do te
 - Preparei o ambiente Python 3.11 com `uv`, executei os testes e gerei os relatórios da amostra e da base principal no PowerShell.
 - Criei as branches e fiz os commits das etapas do projeto. Pedi um painel com Plotly e, depois de ver a prévia interativa, solicitei o filtro mensal.
 
+- Depois de enviar o link do GitHub, pedi uma análise da base de reservas e sua inclusão como complemento da entrega.
+
 ## O que o Codex fez
 
 - Leu o enunciado, analisou a arquitetura e investigou as divergências entre o código, os testes e o relatório esperado.
 - Editou a lógica de status, noites, câmbio e ranking. Corrigiu o limite de leitura do CSV e o tratamento de entradas inválidas. Criou testes de regressão em arquivos separados e executou os testes no Python 3.11.
 - Implementou o painel opcional com Plotly e o filtro por mês de check-in a partir do JSON do CLI. Testou a geração e o uso offline no navegador.
 - Atualizou as instruções de execução, registrou as causas dos defeitos e as validações no `README-ENTREGA.md` e preparou esta declaração e o registro consolidado.
+- Cruzou os CSVs de reservas e câmbio, conferiu os totais e documentou a análise mensal, os status e as comparações entre hotéis e localidades em [Análise das reservas de hotel](../ANALISE-DADOS.md). Também atualizou o registro da sessão.
