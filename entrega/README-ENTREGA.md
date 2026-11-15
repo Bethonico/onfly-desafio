@@ -39,6 +39,7 @@ A investigação inicial comparou o comportamento descrito no README com os test
 | Câmbio | A conversão divide pela taxa e passa por `float`, embora a taxa represente o fator de multiplicação para BRL. | Corrigido. O valor é multiplicado pela taxa usando `Decimal`, com arredondamento apenas na saída. |
 | Ranking | A ordenação por valor é crescente, então os hotéis de menor gasto aparecem primeiro. | Corrigido. O ranking usa primeiro o maior valor em reais e depois o menor `hotel_id` em caso de empate. |
 | Leitura do CSV | O leitor encerrava o processamento ao atingir 200 reservas. | Corrigido. O leitor percorre o CSV até o fim. |
+| Taxa ausente | A busca por uma moeda ausente na tabela gerava um erro inesperado de chave. | Corrigido. O CLI informa a moeda e retorna código 2. |
 
 ## Como validar
 
@@ -68,3 +69,5 @@ Compare `output/exemplo.json` com a amostra do README. O resumo esperado tem 12 
 A execução na amostra confirmou o resumo, os totais mensais e os cinco hotéis esperados no README.
 
 **Após corrigir a leitura do CSV** — 6 testes passaram no Python 3.11.18, incluindo os 5 fornecidos. O teste novo reproduziu o corte antes da correção e agora confirma que as 201 reservas contribuem para as contagens, as noites e o valor total. Na base principal, o CLI contou 300 reservas, sendo 235 confirmadas, 31 canceladas e 34 não comparecimentos. O relatório registrou 1.347 noites de quarto, total de `"396170.00"` e média de `"294.11"` por noite de quarto.
+
+**Após tratar a taxa ausente** — 7 testes passaram no Python 3.11.18, incluindo os 5 fornecidos. O teste novo confirmou o código de saída 2, a identificação da moeda sem taxa e a ausência de JSON de saída. A base principal voltou a produzir o relatório com as 300 reservas.
