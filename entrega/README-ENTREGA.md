@@ -75,3 +75,9 @@ A execução na amostra confirmou o resumo, os totais mensais e os cinco hotéis
 **Após tratar a taxa ausente** — 7 testes passaram no Python 3.11.18, incluindo os 5 fornecidos. O teste novo confirmou o código de saída 2, a identificação da moeda sem taxa e a ausência de JSON de saída. A base principal voltou a produzir o relatório com as 300 reservas.
 
 **Após corrigir os CSVs inválidos** — 11 testes passaram no Python 3.11.18, incluindo os 5 fornecidos. Os quatro casos novos confirmaram o código 2 para UTF-8 inválido nos dois CSVs e para taxas `NaN` e `Infinity`. O Ruff passou, e os exemplos de execução do README geraram os relatórios da amostra e da base principal.
+
+## Painel interativo (extra)
+
+O script em scripts/gerar_painel.py usa o JSON consolidado para exibir indicadores, gasto mensal, ranking de hotéis e contagem por status. A dependência opcional do Plotly está em requirements-painel.txt. Veja os [comandos de geração do painel](../README.md#painel-interativo-extra).
+
+O HTML foi aberto no Chrome em modo offline com a base principal, a amostra e um relatório sem reservas confirmadas. Indicadores e valores dos gráficos foram conferidos contra o JSON. A base principal foi verificada em larguras de 320, 390 e 1.280 pixels. A suíte do CLI passou com 11 testes no Python 3.11.18, e o Ruff passou incluindo o novo script.

@@ -192,6 +192,25 @@ PYTHONPATH=src python -m onfly_report \
 
 A amostra cobre apenas parte dos cenários; use as regras acima para os demais.
 
+## Painel interativo (extra)
+
+Gere `output/report.json` com o CLI antes de montar o painel. Na raiz do projeto, com Python 3.11 ativo, execute os comandos abaixo.
+
+```bash
+python -m pip install -r requirements-painel.txt
+python scripts/gerar_painel.py
+```
+
+Em um ambiente criado com `uv`, a instalação também pode ser feita com `uv pip install -r requirements-painel.txt`.
+
+Abra `output/painel.html` no navegador. O arquivo inclui o Plotly e funciona offline. O painel mostra os indicadores, o gasto mensal, os hotéis do ranking e a contagem por status a partir do JSON já calculado.
+
+Para gerar um painel da amostra após produzir `output/exemplo.json`, execute o comando abaixo.
+
+```bash
+python scripts/gerar_painel.py --input output/exemplo.json --output output/painel-exemplo.html
+```
+
 ## Entrega
 
 Suba o projeto, incluindo a pasta `entrega/`, em um repositório público no GitHub e compartilhe o

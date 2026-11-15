@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reservas de hotel | Relatório Onfly</title>
+  <style>
+    :root {
+      color-scheme: light;
+      color: #19374b;
+      background: #edf3f6;
+      font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      --muted: #496373;
+      --border: #d8e5ec;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; }
+    main { width: min(1120px, 100% - 48px); margin: 38px auto 24px; }
+    .hero {
+      background: radial-gradient(ellipse at 100% 0%, #135e61 0%, transparent 65%), #112f3f;
+      border-radius: 22px;
+      padding: clamp(26px, 5.7vw, 60px);
+      color: white;
+    }
+    h1, h2, p { margin: 0; }
+    h1 {
+      font-size: clamp(2.25rem, 5.5vw, 4rem);
+      letter-spacing: -.055em;
+      line-height: 1.03;
+    }
+    .period { margin-top: 14px; color: #dcf4f0; font-size: 1rem; }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin: 18px 0;
+    }
+    .metric, .panel {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 6px 18px #17394a0a;
+    }
+    .metric { padding: 18px 20px; }
+    .metric dt {
+      font-weight: 650;
+      font-size: .86rem;
+      color: var(--muted);
+    }
+    .metric dd {
+      margin: 8px 0 0;
+      font-size: clamp(1.35rem, 2.35vw, 2rem);
+      font-weight: 720;
+      letter-spacing: -.035em;
+      font-variant-numeric: tabular-nums;
+    }
+    .metric dd.note {
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 400;
+      letter-spacing: normal;
+    }
+    .metric.spend { border-top: 3px solid #087d77; padding-top: 16px; }
+    .panel { min-width: 0; padding: 22px 17px 10px; }
+    .panel header { margin: 0 6px 4px; }
+    .panel h2 { font-size: 1.18rem; letter-spacing: -.018em; }
+    .panel header p { margin-top: 5px; color: var(--muted); font-size: .88rem; }
+    .breakdown {
+      display: grid;
+      grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr);
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .chart { min-width: 0; }
+    .empty { color: var(--muted); padding: 36px 6px; }
+    footer { margin: 20px 3px; color: var(--muted); font-size: .82rem; }
+    @media (max-width: 840px) {
+      .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .breakdown { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 480px) {
+      main { width: calc(100% - 24px); margin-top: 12px; }
+      .metrics { gap: 10px; margin: 12px 0; }
+      .metric { padding: 14px 12px; }
+      .metric.spend { padding-top: 12px; }
+      .metric dd { font-size: clamp(1.05rem, 5.3vw, 1.5rem); }
+      .panel { padding: 18px 6px 6px; }
+      .breakdown { gap: 12px; margin-top: 12px; }
+    }
+  </style>
+  <script>$plotly_js</script>
+</head>
+<body>
+  <main>
+    <header class="hero">
+      <h1>Reservas de hotel</h1>
+      <p class="period">$period</p>
+    </header>
+
+    <dl class="metrics" aria-label="Indicadores do relatório">
+      <div class="metric">
+        <dt>Reservas</dt><dd>$total_reservations</dd>
+        <dd class="note">$confirmed_reservations confirmadas</dd>
+      </div>
+      <div class="metric">
+        <dt>Noites de quarto</dt><dd>$total_room_nights</dd>
+      </div>
+      <div class="metric spend">
+        <dt>Gasto total</dt><dd>$total_amount_brl</dd>
+      </div>
+      <div class="metric">
+        <dt>Média por noite de quarto</dt><dd>$average_nightly_rate_brl</dd>
+      </div>
+    </dl>
+
+    <section class="panel" aria-labelledby="monthly-title">
+      <header>
+        <h2 id="monthly-title">Gasto por mês de check-in</h2>
+        <p>Valor em reais das reservas confirmadas</p>
+      </header>
+      <div class="chart">$monthly_chart</div>
+    </section>
+
+    <div class="breakdown">
+      <section class="panel" aria-labelledby="ranking-title">
+        <header>
+          <h2 id="ranking-title">Hotéis com maior gasto</h2>
+        </header>
+        <div class="chart">$ranking_chart</div>
+      </section>
+      <section class="panel" aria-labelledby="status-title">
+        <header>
+          <h2 id="status-title">Reservas por status</h2>
+        </header>
+        <div class="chart">$status_chart</div>
+      </section>
+    </div>
+
+    <footer>Relatório gerado em $generated_at (UTC−03:00)</footer>
+  </main>
+</body>
+</html>
