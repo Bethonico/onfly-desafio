@@ -42,6 +42,7 @@ A investigação inicial comparou o comportamento descrito no README com os test
 | Taxa ausente | A busca por uma moeda ausente na tabela gerava um erro inesperado de chave. | Corrigido. O CLI informa a moeda e retorna código 2. |
 | Codificação do CSV | A falha ao decodificar UTF-8 escapava do tratamento dos erros de entrada. | Corrigido. Os dois leitores informam o erro e o CLI retorna código 2. |
 | Taxa de câmbio não finita | A comparação com zero acontecia sem verificar se a taxa era finita. | Corrigido. A tabela aceita apenas taxas finitas e positivas. |
+| Valor da reserva | A conversão de amount para Decimal aceitava valores não finitos. | Corrigido. O CLI informa a linha inválida e retorna código 2. |
 
 ## Como validar
 
@@ -75,6 +76,8 @@ A execução na amostra confirmou o resumo, os totais mensais e os cinco hotéis
 **Após tratar a taxa ausente** — 7 testes passaram no Python 3.11.18, incluindo os 5 fornecidos. O teste novo confirmou o código de saída 2, a identificação da moeda sem taxa e a ausência de JSON de saída. A base principal voltou a produzir o relatório com as 300 reservas.
 
 **Após corrigir os CSVs inválidos** — 11 testes passaram no Python 3.11.18, incluindo os 5 fornecidos. Os quatro casos novos confirmaram o código 2 para UTF-8 inválido nos dois CSVs e para taxas `NaN` e `Infinity`. O Ruff passou, e os exemplos de execução do README geraram os relatórios da amostra e da base principal.
+
+**Após validar o valor da reserva** — os 14 testes passaram no Python 3.11.18. Os testes novos confirmaram o código de saída 2 para `NaN`, `Infinity` e `-Infinity`, com a linha do erro e sem gerar JSON. O Ruff passou. Os relatórios da amostra e da base principal coincidiram com os resultados já validados.
 
 ## Painel interativo (extra)
 

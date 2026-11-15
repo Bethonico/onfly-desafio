@@ -19,6 +19,10 @@ class RowParser:
     def parse(self, raw: RawRow) -> Reservation:
         values = raw.values
         try:
+            amount = Decimal((values.get("amount") or "").strip())
+            if not amount.is_finite():
+                raise ValueError("amount deve ser um número finito")
+
             return Reservation(
                 reservation_id=(values.get("reservation_id") or "").strip(),
                 traveler_name=(values.get("traveler_name") or "").strip(),
@@ -32,7 +36,7 @@ class RowParser:
                 rooms=int((values.get("rooms") or "").strip()),
                 status=(values.get("status") or "").strip(),
                 currency=(values.get("currency") or "").strip(),
-                amount=Decimal((values.get("amount") or "").strip()),
+                amount=amount,
                 payment_method=(values.get("payment_method") or "").strip(),
                 line_number=raw.line_number,
             )
