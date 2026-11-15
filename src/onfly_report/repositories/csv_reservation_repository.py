@@ -47,5 +47,5 @@ class CsvReservationRepository:
                 return rows
         except FileNotFoundError as err:
             raise InputFileError(f"arquivo de reservas não encontrado: {self._path}") from err
-        except (OSError, csv.Error) as err:
+        except (OSError, UnicodeDecodeError, csv.Error) as err:
             raise InputFileError(f"falha ao ler {self._path}: {err}") from err
